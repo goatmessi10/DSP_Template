@@ -1,0 +1,125 @@
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Trial</title>
+   
+
+</head>
+<body>
+    <div id="pano"></div>
+    <script src="marzipano.js"></script>
+    <script>
+       
+        var panoElement = document.getElementById("pano");
+    
+// Create viewer.
+var viewerOpts = { stageType: 'webgl', stage: { preserveDrawingBuffer: true } };
+var viewer = new Marzipano.Viewer(document.getElementById('pano'), viewerOpts);
+        console.log("Reached !");
+    console.log(viewer);
+
+    var levels = [
+            { tileSize: 512, size: 512 },
+            { tileSize: 512, size: 1024 }
+        ];
+       
+         var geometry = new Marzipano.EquirectGeometry(levels);
+        var source = Marzipano.ImageUrlSource.fromString("base.jpg");
+         var view = new Marzipano.RectilinearView();
+        console.log({source});
+        console.log({view});
+        console.log({geometry});
+        console.log({viewer});
+      
+        var initialView = {
+    yaw: 0,
+    pitch: 0,
+    fov: 75
+            };
+//Create view.
+ var limiter = Marzipano.RectilinearView.limit.traditional(2048, 120 * Math.PI / 180);
+var view = new Marzipano.RectilinearView(null, limiter);
+ var view = new Marzipano.RectilinearView(initialView, limiter);
+
+// Create an empty scene into which layers will be added.
+var scene = viewer.createEmptyScene({ view: view });
+
+
+var maxSize = viewer.stage().maxTextureSize();
+var maxDimensions = maxSize + 'x' + maxSize;
+console.log({limiter,view,scene,maxSize,maxDimensions});
+
+
+function fileToCanvas(filepath, done) {
+    console.log("full path"+filepath);
+    var canvas = document.createElement('canvas');
+    var ctx = canvas.getContext('2d');
+    var img = document.createElement('img');
+    img.onload = function () {
+        canvas.width = img.naturalWidth;
+        canvas.height = img.naturalHeight;
+        ctx.drawImage(img, 0, 0);
+        done(null, canvas);
+    };
+    img.onerror = function (err) {
+        done(err);
+    };
+    img.src = filepath;
+}
+
+//Import a canvas into a layer.
+function importLayer(filepath, filename) {
+    console.log(filepath, filename);
+    fileToCanvas(filepath, function (err, canvas) {
+        if (err) {
+            alert('Unable to load image file.');
+            return;
+        }
+        if (canvas.width > maxSize || canvas.height > maxSize) {
+            alert('Image is too large. The maximum supported size is ' +
+                maxSize + ' by ' + maxSize + ' pixels.');
+            return;
+        }
+
+        // Create layer.
+       // var stage = viewer.stage();
+      
+        var alt = new Marzipano.DynamicCanvasAsset(canvas);
+        //below code is not giving error but still view is not generated
+        //var alt = new Marzipano.DynamicAsset(canvas);
+        var src = new Marzipano.SingleAssetSource(alt);
+        console.log({atl,src});
+        var geometry = new Marzipano.EquirectGeometry([{ width: canvas.width }]);
+        var layer = scene.createLayer({
+            source: src,
+            geometry: geometry
+        });
+
+
+    });
+}
+
+
+function loadScene() {
+    length = 0;
+    console.log("in load scene !");
+    importLayer('base.jpg','base');
+    
+    
+}
+loadScene();
+
+// var pano = document.getElementById("pano");
+// pano.addEventListener("click", function (e) {
+//    var v = viewer.view();
+//    console.log(v);
+// console.log(v.screenToCoordinates({x: e.clientX, y: e.clientY}));
+// })
+
+    scene.switchTo({ transitionDuration: 1000});
+    </script>
+     
+</body>
+</html>
