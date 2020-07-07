@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Template</title>
+<meta name="description" content="Demonstrates the Layer mechanism in Marzipano and showcases the different effects that can be applied." />
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<!-- <meta name="viewport" content="target-densitydpi=device-dpi, width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, minimal-ui" /> -->
+<style>@-ms-viewport { width: device-width; }</style>
+<link rel="stylesheet" href="//www.marzipano.net/demos/common/reset.css">
+<link rel="stylesheet" href="//www.marzipano.net/demos/common/hint.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<script src="marzipano.js"></script>
+<div id="wrapper">
+  <div id="pano"></div>
+  <div id="sidebar" style="text-align: center;">
+    <div class="instructions">
+      <p>
+        Add 2:1 equirectangular images in JPEG format.
+      </p>
+      
+    </div>
+    <div id="ypcontent">
+    <input id="selectFilesInput" type="file" multiple style="display: none">
+    <button id="selectFilesButton">Add Image</button>
+    <h1 style="padding: 30px 5px 10px ;">Yaw Pitch Values</h1>
+    <div id="ypset"  style=" height: 60px; padding: 20px; margin-top: 30px; background-color: rgb(104, 96, 96);">
+    </div>
+     
+    </div>  
+  </div>
+    
+</div>
+
+
+<script src="//www.marzipano.net/demos/common/es5-shim.js"></script>
+<script src="//www.marzipano.net/demos/common/eventShim.js"></script>
+<script src="//www.marzipano.net/demos/common/requestAnimationFrame.js" ></script>
+<script src="//www.marzipano.net/demos/common/knockout.js" ></script>
+<script src="index.js"></script>
+
+</body>
+</html>
