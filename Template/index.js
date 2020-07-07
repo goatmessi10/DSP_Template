@@ -24,10 +24,8 @@ var layers = ko.observableArray([]);
 var selectFilesInput = document.getElementById('selectFilesInput');
 selectFilesInput.addEventListener('change', function() {
   if (this.files && this.files.length > 0) {
-    for (var i = 0; i < this.files.length; i++) {
-      importLayer(this.files[i]);
+      importLayer(this.files[0]);
     }
-  }
   this.value = null;
 });
 var selectFilesButton = document.getElementById('selectFilesButton');
@@ -50,11 +48,11 @@ function fileToCanvas(file, done) {
     done(err);
   };
   img.src = URL.createObjectURL(file);
-  console.log(img.naturalWidth,img.naturalHeight);
 }
 
 // Import a canvas into a layer.
 function importLayer(file) {
+
   fileToCanvas(file, function(err, canvas) {
     if (err) {
       alert('Unable to load image file.');
@@ -75,14 +73,6 @@ function importLayer(file) {
       geometry: geometry
     });
 
-  
-
-    // Add layer into the view model.
-    layers.unshift({
-      name: file.name,
-      layer: layer,
-      canvas: canvas
-    });
   });
 }
 
