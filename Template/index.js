@@ -106,33 +106,40 @@ ko.bindingHandlers.element = {
 
 ko.applyBindings(viewModel);
 var pano = document.getElementById("pano");
+
 pano.addEventListener("click", function (e) {
    var view = viewer.view();
    var ypSet=view.screenToCoordinates({x: e.clientX, y: e.clientY});
-   var forCopy = "\"yaw\":"+ypSet.yaw.toFixed(2)+","+"\n"+"\"pitch\":"+ypSet.pitch.toFixed(2);
-  document.getElementById("ypset").innerHTML="Yaw :&emsp;"+ypSet.yaw.toFixed(2)+"<br><br>"+"Pitch :&emsp;"+ypSet.pitch.toFixed(2);
-  var ypdiv =document.getElementById("ypcontent");
-  document.getElementById("ypset").style.cursor="pointer";
+   //if image is not loaded yet
+   if(isNaN(ypSet.yaw))
+   {tempNotification("Upload an Image",800);
+   return ;
+   }
 
-  ypdiv.addEventListener('click', function() { 
-   // var data=document.getElementById("ypset").textContent;
+   //for formated data used for copying
+   var forCopy = "\"yaw\":"+ypSet.yaw.toFixed(2)+","+"\n"+"\"pitch\":"+ypSet.pitch.toFixed(2);
+   document.getElementById("ypset").innerHTML="Yaw :&emsp;"+ypSet.yaw.toFixed(2)+"<br><br>"+"Pitch :&emsp;"+ypSet.pitch.toFixed(2);
+   //pointer 
+   var ypdiv =document.getElementById("ypset");
+   document.getElementById("ypset").style.cursor="pointer";
+   //diplay div
+    ypdiv.style.display="block";
+   //on click copy the data in format 
+   ypdiv.addEventListener('click', function() { 
      copyToClipboard(forCopy);
-    tempAlert("copied",800);
+    tempNotification("copied",800);
     });
     
-    function tempAlert(msg,duration){
-   var el = document.createElement("div");
-   el.setAttribute("style","position:absolute;top:45%;left:87%;background-color:rgb(104,96,96);  box-shadow: 2px 4px #888888;");
-   el.style.color="white";
-   el.style.padding="5px";
-   el.innerHTML = msg;
-   setTimeout(function(){
-   el.parentNode.removeChild(el);
-  },duration);
-   document.body.appendChild(el);
+    //notification snackbar
+    function tempNotification(msg,duration){
+   var notificationBar = document.getElementById("snackbar");
+   notificationBar.style.letterSpacing="2px";
+   notificationBar.className = "show";
+   notificationBar.textContent=msg;
+   setTimeout(function(){ notificationBar.className = notificationBar.className.replace("show", ""); }, duration);
   }
-    
-    function copyToClipboard(text) {
+   //copy text to clipboard 
+  function copyToClipboard(text) {
       var dummy = document.createElement("textarea");
       document.body.appendChild(dummy);
       dummy.value = text;
