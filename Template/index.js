@@ -119,19 +119,20 @@ var pano = document.getElementById("pano");
 pano.addEventListener("click", function (e) {
    var view = viewer.view();
    var ypSet=view.screenToCoordinates({x: e.clientX, y: e.clientY});
-  document.getElementById("ypset").textContent="\"yaw\":"+ypSet.yaw.toFixed(2)+","+"\n"+"\"pitch\":"+ypSet.pitch.toFixed(2);
+   var forCopy = "\"yaw\":"+ypSet.yaw.toFixed(2)+","+"\n"+"\"pitch\":"+ypSet.pitch.toFixed(2);
+  document.getElementById("ypset").innerHTML="Yaw :&emsp;"+ypSet.yaw.toFixed(2)+"<br><br>"+"Pitch :&emsp;"+ypSet.pitch.toFixed(2);
   var ypdiv =document.getElementById("ypcontent");
   document.getElementById("ypset").style.cursor="pointer";
 
   ypdiv.addEventListener('click', function() { 
-    var data=document.getElementById("ypset").textContent;
-     copyToClipboard(data);
+   // var data=document.getElementById("ypset").textContent;
+     copyToClipboard(forCopy);
     tempAlert("copied",800);
     });
     
     function tempAlert(msg,duration){
    var el = document.createElement("div");
-   el.setAttribute("style","position:absolute;top:40%;left:87%;background-color:rgb(104,96,96);  box-shadow: 2px 4px #888888;");
+   el.setAttribute("style","position:absolute;top:45%;left:87%;background-color:rgb(104,96,96);  box-shadow: 2px 4px #888888;");
    el.style.color="white";
    el.style.padding="5px";
    el.innerHTML = msg;
